@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<title>랜덤 숫자 추첨기</title>
+
+<style>
+
+body{
+font-family:-apple-system;
+text-align:center;
+background:#f5f5f5;
+margin:10px;
+}
+
+h1{
+margin-bottom:10px;
+}
+
+#result{
+font-size:80px;
+font-weight:bold;
+margin:20px;
+}
+
+#history{
+font-size:22px;
+margin:10px;
+}
+
+#stats{
+font-size:18px;
+margin:10px;
+}
+
+#grid{
+display:grid;
+gap:4px;
+justify-content:center;
+margin-top:20px;
+}
+
+.cell{
+background:#d9d9d9;
+border:1px solid #999;
+font-weight:bold;
+padding:8px;
+width:48px;
+}
+
+.drawn{
+background:yellow;
+}
+
+button{
+font-size:20px;
+padding:12px 18px;
+margin:5px;
+border-radius:8px;
+border:none;
+background:#007AFF;
+color:white;
+}
+
+input{
+font-size:20px;
+width:80px;
+text-align:center;
+}
+
+</style>
+</head>
+
+<body>
+
+<h1>랜덤 숫자 추첨기</h1>
+
+숫자 개수  
+<input id="count" type="number" value="100">
+
+<br><br>
+
+<button onclick="start()">시작</button>
+<button onclick="pick()">숫자 뽑기</button>
+
+<div id="result"></div>
+
+<div id="history">
+마지막: 없음<br>
+이전: 없음
+</div>
+
+<div id="stats">
+뽑힘: 0 / 0 (0%)
+</div>
+
+<div id="grid"></div>
+
+<script>
+
+let remaining=[]
+let drawn=[]
+let total=0
+
+function start(){
+
+total=parseInt(document.getElementById("count").value)
+
+remaining=[]
+drawn=[]
+
+for(let i=1;i<=total;i++){
+remaining.push(i)
+}
+
+let grid=document.getElementById("grid")
+grid.innerHTML=""
+
+let cols=Math.ceil(Math.sqrt(total))
+
+grid.style.gridTemplateColumns="repeat("+cols+",50px)"
+
+for(let i=1;i<=total;i++){
+
+let cell=document.createElement("div")
+cell.className="cell"
+cell.id="cell"+i
+cell.innerText=i
+
+grid.appendChild(cell)
+
+}
+
+document.getElementById("result").innerText=""
+document.getElementById("history").innerHTML="마지막: 없음<br>이전: 없음"
+document.getElementById("stats").innerText="뽑힘: 0 / "+total+" (0%)"
+
+}
+
+function pick(){
+
+if(remaining.length===0){
+
+start()
+document.getElementById("result").innerText="리셋!"
+return
+
+}
+
+let count=0
+
+let interval=setInterval(()=>{
+
+let rand=remaining[Math.floor(Math.random()*remaining.length)]
+
+document.getElementById("result").innerText=rand
+
+count++
+
+if(count>15){
+
+clearInterval(interval)
+
+let num=remaining[Math.floor(Math.random()*remaining.length)]
+
+remaining=remaining.filter(n=>n!==num)
+
+drawn.push(num)
+
+document.getElementById("cell"+num).classList.add("drawn")
+
+document.getElementById("result").innerText=num
+
+let last=num
+let prev=drawn.length>=2 ? drawn[drawn.length-2] : "없음"
+
+document.getElementById("history").innerHTML=
+"마지막: "+last+"<br>이전: "+prev
+
+let percent=((drawn.length/total)*100).toFixed(1)
+
+document.getElementById("stats").innerText=
+"뽑힘: "+drawn.length+" / "+total+" ("+percent+"%)"
+
+}
+
+},30)
+
+}
+
+</script>
+
+</body>
+</html>
