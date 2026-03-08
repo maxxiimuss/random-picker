@@ -127,7 +127,7 @@ remaining.push(i)
 let grid=document.getElementById("grid")
 grid.innerHTML=""
 
-let cols=Math.min(10,total)
+let cols=Math.ceil(Math.sqrt(total))
 
 grid.style.gridTemplateColumns="repeat("+cols+",30px)"
 
