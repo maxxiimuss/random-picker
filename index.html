@@ -33,13 +33,13 @@ font-size:18px;
 margin:10px;
 }
 
+
 #grid{
 display:grid;
-gap:4px;
+gap:2px;
 justify-content:center;
 margin-top:20px;
 }
-
 .cell{
 background:#d9d9d9;
 border:1px solid #999;
@@ -50,6 +50,7 @@ display:flex;
 align-items:center;
 justify-content:center;
 }
+
 .drawn{
 background:yellow;
 }
@@ -118,7 +119,10 @@ remaining.push(i)
 let grid=document.getElementById("grid")
 grid.innerHTML=""
 
-let cols=Math.ceil(Math.sqrt(total))
+
+let cols=Math.min(10,total)
+
+grid.style.gridTemplateColumns="repeat("+cols+",30px)"
 
 grid.style.gridTemplateColumns="repeat("+cols+",50px)"
 
